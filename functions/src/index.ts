@@ -1,30 +1,24 @@
-import * as functions from "firebase-functions";
+import * as cors from 'cors';
+import * as express from 'express';
+import * as functions from 'firebase-functions';
 
-import * as express from "express";
-import * as cors from "cors";
+import { onNewUser } from './firestore/onNewUser';
+import { addEmails } from './routes/addEmails';
+import { createEvent } from './routes/createEvent';
+import { getEvent } from './routes/getEvent';
 
 const app = express();
 app.use(express.json());
 
-app.use(cors({origin: true}));
+app.use(cors({ origin: true }));
 
-app.get("/", (_, res) => {
-  const date = new Date();
-  const hours = (date.getHours() % 12) + 1; // London is UTC + 1hr;
-  res.send(`Some time now ${hours}`);
-});
+app.get('/event/:eventId', getEvent);
+app.post('/event', createEvent);
+app.post('/event/add', addEmails);
 
-app.get("/api", (req, res) => {
-  const date = new Date();
-  const hours = (date.getHours() % 12) + 1; // London is UTC + 1hr;
-  res.json({bongs: "BONG ".repeat(hours)});
-});
+export const main = functions.region('europe-west1').https.onRequest(app);
 
-app.post("/body", (req, res) => {
-  const body = req.body;
-  console.log("Body", body);
-  res.json(body);
-});
-
-
-exports.app = functions.https.onRequest(app);
+export const createFirebaseUser = functions
+  .region('europe-west1')
+  .auth.user()
+  .onCreate(onNewUser);
