@@ -1,0 +1,21 @@
+{
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "cSpell.words": [
+    "Mahedi",
+    "buga",
+    "bugendo",
+    "codegen",
+    "firestore",
+    "hasan",
+    "keynod",
+    "pepe",
+    "postgres",
+    "tinyid",
+    "uga",
+    "ugabuga",
+    "ugendo"
+  ],
+}
