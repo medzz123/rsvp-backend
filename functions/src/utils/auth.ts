@@ -1,6 +1,6 @@
 import admin from '../db';
 
-export const getAuthToken = (req, res, next) => {
+export const getAuthToken = (req: any, res: any, next: any) => {
   if (
     req.headers.authorization &&
     req.headers.authorization.split(' ')[0] === 'Bearer'
@@ -12,11 +12,13 @@ export const getAuthToken = (req, res, next) => {
   next();
 };
 
-export const checkIfAuthenticated = (req, res, next) => {
+export const checkIfAuthenticated = (req: any, res: any, next: any) => {
   getAuthToken(req, res, async () => {
     try {
       const { authToken } = req;
       const userInfo = await admin.auth().verifyIdToken(authToken);
+
+      console.log('user info', userInfo);
       req.authId = userInfo.uid;
       return next();
     } catch (e) {

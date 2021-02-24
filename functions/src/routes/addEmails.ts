@@ -4,8 +4,6 @@ import { db } from '../db';
 import { CustomRequest } from '../types/request';
 import { nanoid } from '../utils/uid';
 
-const USER_ID = 'FTdPkCzvCONxHShgR9Dl';
-
 export interface AddEmailsBody {
   emails: string[];
   id: string;
@@ -24,7 +22,9 @@ export const addEmails = async (
     token: nanoid(),
   }));
 
-  const userRef = db.collection('users').doc(USER_ID);
+  const uid = (req as any).authId;
+
+  const userRef = db.collection('users').doc(uid);
 
   try {
     const eventRef = userRef.collection('events').doc(id);

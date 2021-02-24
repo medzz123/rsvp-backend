@@ -2,11 +2,10 @@ import { Request, Response } from 'express';
 
 import { db } from '../db';
 
-const USER_ID = 'FTdPkCzvCONxHShgR9Dl';
-
-const getUser = async (_: Request, res: Response) => {
+const getUser = async (req: Request, res: Response) => {
   try {
-    const ref = db.collection('users').doc(USER_ID);
+    const uid = (req as any).authId;
+    const ref = db.collection('users').doc(uid);
 
     const userSnapshot = await ref.get();
 

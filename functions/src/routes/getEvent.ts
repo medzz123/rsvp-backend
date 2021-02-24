@@ -2,19 +2,20 @@ import { Request, Response } from 'express';
 
 import { db } from '../db';
 
-const USER_ID = 'FTdPkCzvCONxHShgR9Dl';
-
 export const getEvent = async (req: Request, res: Response) => {
   const { eventId } = req.params;
 
   if (!eventId) {
     res.status(400).send('Event Id os required');
   }
+  console.log('uid', req);
 
   try {
+    const uid = (req as any).authId;
+
     const ref = db
       .collection('users')
-      .doc(USER_ID)
+      .doc(uid)
       .collection('events')
       .doc(eventId);
 
