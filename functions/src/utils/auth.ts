@@ -18,8 +18,7 @@ export const checkIfAuthenticated = (req: any, res: any, next: any) => {
       const { authToken } = req;
       const userInfo = await admin.auth().verifyIdToken(authToken);
 
-      console.log('user info', userInfo);
-      req.authId = userInfo.uid;
+      req.email = userInfo.email;
       return next();
     } catch (e) {
       return res

@@ -1,6 +1,6 @@
 import { Response } from 'express';
 
-import { db } from '../db';
+import admin, { db } from '../db';
 import { CustomRequest } from '../types/request';
 import { nanoid } from '../utils/uid';
 
@@ -22,7 +22,7 @@ export const addEmails = async (
     token: nanoid(),
   }));
 
-  const uid = (req as any).authId;
+  const { uid } = await admin.auth().getUserByEmail((req as any).email);
 
   const userRef = db.collection('users').doc(uid);
 

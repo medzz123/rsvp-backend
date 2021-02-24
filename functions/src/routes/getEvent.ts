@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { db } from '../db';
+import admin, { db } from '../db';
 
 export const getEvent = async (req: Request, res: Response) => {
   const { eventId } = req.params;
@@ -8,10 +8,9 @@ export const getEvent = async (req: Request, res: Response) => {
   if (!eventId) {
     res.status(400).send('Event Id os required');
   }
-  console.log('uid', req);
 
   try {
-    const uid = (req as any).authId;
+    const { uid } = await admin.auth().getUserByEmail((req as any).email);
 
     const ref = db
       .collection('users')

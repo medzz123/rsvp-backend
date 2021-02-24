@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 
-import { db } from '../db';
+import admin, { db } from '../db';
 
 const getUser = async (req: Request, res: Response) => {
   try {
-    const uid = (req as any).authId;
+    const { uid } = await admin.auth().getUserByEmail((req as any).email);
+
     const ref = db.collection('users').doc(uid);
 
     const userSnapshot = await ref.get();
