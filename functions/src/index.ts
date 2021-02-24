@@ -8,6 +8,7 @@ import { createEvent } from './routes/createEvent';
 import { createUser } from './routes/createUser';
 import { getEvent } from './routes/getEvent';
 import { getUser } from './routes/getUser';
+import { checkIfAuthenticated } from './utils/auth';
 
 const app = express();
 app.use(express.json());
@@ -15,12 +16,12 @@ app.use(express.json());
 app.use(cors({ origin: true }));
 
 // Get events
-app.get('/event/:eventId', getEvent);
-app.get('/user', getUser);
+app.get('/event/:eventId', checkIfAuthenticated, getEvent);
+app.get('/user', checkIfAuthenticated, getUser);
 
 // Post events
-app.post('/event', createEvent);
-app.post('/event/add', addEmails);
+app.post('/event', checkIfAuthenticated, createEvent);
+app.post('/event/add', checkIfAuthenticated, addEmails);
 app.post('/createUser', createUser);
 
 export const main = functions.region('europe-west1').https.onRequest(app);
