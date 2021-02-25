@@ -1,32 +1,38 @@
 import { Response } from 'express';
+import { array, assert, Infer, object, string } from 'superstruct';
 
 import admin, { db } from '../db';
 import { CustomRequest } from '../types/request';
+import { handleError } from '../utils/handleError';
 import { nanoid } from '../utils/uid';
 
-export interface AddEmailsBody {
-  emails: string[];
-  id: string;
-}
+const AddEmailRequest = object({
+  emails: array(string()),
+  id: string(),
+});
+
+type AddEmailsBody = Infer<typeof AddEmailRequest>;
 
 export const addEmails = async (
   req: CustomRequest<AddEmailsBody>,
   res: Response
 ) => {
-  const { emails, id } = req.body;
-
-  const attendees = emails.map((email) => ({
-    attending: false,
-    email,
-    replied: false,
-    token: nanoid(),
-  }));
-
-  const { uid } = await admin.auth().getUserByEmail((req as any).email);
-
-  const userRef = db.collection('users').doc(uid);
-
   try {
+    assert(req.body, AddEmailRequest);
+
+    const { emails, id } = req.body;
+
+    const attendees = emails.map((email) => ({
+      attending: false,
+      email,
+      replied: false,
+      token: nanoid(),
+    }));
+
+    const { uid } = await admin.auth().getUserByEmail((req as any).email);
+
+    const userRef = db.collection('users').doc(uid);
+
     const eventRef = userRef.collection('events').doc(id);
 
     await db.runTransaction(async (t) => {
@@ -36,9 +42,10 @@ export const addEmails = async (
       });
     });
 
-    res.status(201).send('Added and sent emails');
+    return res.status(201).send('Added and sent emails');
   } catch (err) {
-    console.log('Failed on creating a new event', err);
-    res.status(500).send('Internal Server Error');
+    const { code, message } = handleError(err);
+
+    return res.status(code).send(message);
   }
 };

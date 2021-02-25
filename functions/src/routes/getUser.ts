@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import admin, { db } from '../db';
+import { handleError } from '../utils/handleError';
 
 const getUser = async (req: Request, res: Response) => {
   try {
@@ -18,10 +19,11 @@ const getUser = async (req: Request, res: Response) => {
       return event.data();
     });
 
-    res.send({ ...userData, events });
+    return res.send({ ...userData, events });
   } catch (err) {
-    console.log('Error getting a user', err);
-    res.status(500).send('Internal Server Error');
+    const { code, message } = handleError(err);
+
+    return res.status(code).send(message);
   }
 };
 

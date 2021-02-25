@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 
 import admin, { db } from '../db';
+import { handleError } from '../utils/handleError';
 
 export const getEvent = async (req: Request, res: Response) => {
   const { eventId } = req.params;
 
   if (!eventId) {
-    res.status(400).send('Event Id os required');
+    return res.status(400).send('Event Id is required');
   }
 
   try {
@@ -28,9 +29,10 @@ export const getEvent = async (req: Request, res: Response) => {
       return attendee.data();
     });
 
-    res.send({ ...eventData, attendees });
+    return res.send({ ...eventData, attendees });
   } catch (err) {
-    console.log('Error getting an event', err);
-    res.status(500).send('Internal Server Error');
+    const { code, message } = handleError(err);
+
+    return res.status(code).send(message);
   }
 };
