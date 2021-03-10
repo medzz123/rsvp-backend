@@ -7,7 +7,9 @@ import { addEmails } from './routes/addEmails';
 import { createEvent } from './routes/createEvent';
 import { createUser } from './routes/createUser';
 import { getEvent } from './routes/getEvent';
+import { getReply } from './routes/getReply';
 import { getUser } from './routes/getUser';
+import { reply } from './routes/reply';
 import { checkIfAuthenticated } from './utils/auth';
 
 const app = express();
@@ -22,7 +24,11 @@ app.get('/user', checkIfAuthenticated, getUser);
 // Post events
 app.post('/event', checkIfAuthenticated, createEvent);
 app.post('/event/add', checkIfAuthenticated, addEmails);
-app.post('/createUser', createUser);
+app.post('/create-user', createUser);
+
+// Reply
+app.post('/reply', reply);
+app.get('/get-reply', getReply);
 
 export const main = functions.region('europe-west1').https.onRequest(app);
 
