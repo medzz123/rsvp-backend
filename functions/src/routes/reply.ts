@@ -35,7 +35,7 @@ export const reply = async (
         attending: attending,
       });
 
-    return res.status(200).send('Successfully replied');
+    return res.status(200).send({ message: 'Successfully replied' });
   } catch (err) {
     const { code, message } = handleError(err);
 

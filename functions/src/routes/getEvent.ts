@@ -7,7 +7,7 @@ export const getEvent = async (req: Request, res: Response) => {
   const { eventId } = req.params;
 
   if (!eventId) {
-    return res.status(400).send('Event Id is required');
+    return res.status(400).send({ message: 'Event Id is required' });
   }
 
   try {

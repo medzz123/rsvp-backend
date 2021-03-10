@@ -42,7 +42,7 @@ export const addEmails = async (
       });
     });
 
-    return res.status(201).send('Added and sent emails');
+    return res.status(201).send({ message: 'Added and sent emails' });
   } catch (err) {
     const { code, message } = handleError(err);
 
