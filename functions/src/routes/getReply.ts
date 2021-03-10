@@ -1,8 +1,7 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { assert, Infer, object, string } from 'superstruct';
 
 import { db } from '../db';
-import { CustomRequest } from '../types/request';
 import { handleError } from '../utils/handleError';
 
 const GetReply = object({
@@ -14,13 +13,13 @@ const GetReply = object({
 type CreateGetReplyBody = Infer<typeof GetReply>;
 
 export const getReply = async (
-  req: CustomRequest<CreateGetReplyBody>,
+  req: Request<CreateGetReplyBody>,
   res: Response
 ) => {
   try {
-    assert(req.body, GetReply);
+    assert(req.query, GetReply);
 
-    const { id, event, token } = req.body;
+    const { id, event, token } = req.query;
 
     const ref = db.collection('users').doc(id).collection('events').doc(event);
 
