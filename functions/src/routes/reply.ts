@@ -39,6 +39,6 @@ export const reply = async (
   } catch (err) {
     const { code, message } = handleError(err);
 
-    return res.status(code).send(message);
+    return res.status(code).send({ message });
   }
 };

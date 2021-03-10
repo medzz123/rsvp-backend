@@ -33,6 +33,6 @@ export const getEvent = async (req: Request, res: Response) => {
   } catch (err) {
     const { code, message } = handleError(err);
 
-    return res.status(code).send(message);
+    return res.status(code).send({ message });
   }
 };

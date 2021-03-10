@@ -30,7 +30,9 @@ export const getReply = async (
     const guestData = await ref.collection('attendees').doc(token).get();
 
     if (!eventData || !guestData) {
-      return res.status(404).send('Could not find an event or attendee');
+      return res
+        .status(404)
+        .send({ message: 'Could not find an event or attendee' });
     }
 
     return res.status(200).send({
@@ -40,6 +42,6 @@ export const getReply = async (
   } catch (err) {
     const { code, message } = handleError(err);
 
-    return res.status(code).send(message);
+    return res.status(code).send({ message });
   }
 };
