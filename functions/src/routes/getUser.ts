@@ -15,9 +15,23 @@ const getUser = async (req: Request, res: Response) => {
 
     const eventSnapshot = await ref.collection('events').get();
 
-    const events = eventSnapshot.docs.map((event) => {
-      return event.data();
-    });
+    const events = await Promise.all(
+      eventSnapshot.docs.map(async (event) => {
+        const eventData = event.data();
+
+        const snap = await ref
+          .collection('events')
+          .doc(eventData.id)
+          .collection('attendees')
+          .get();
+
+        const attendees = snap.docs.map((a) => a.data());
+
+        eventData.attendees = attendees;
+
+        return eventData;
+      })
+    );
 
     return res.send({ ...userData, events });
   } catch (err) {
