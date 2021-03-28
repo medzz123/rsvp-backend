@@ -3,7 +3,6 @@ import * as express from 'express';
 import * as functions from 'firebase-functions';
 
 import { onNewUser } from './firestore/onNewUser';
-import { addEmails } from './routes/addEmails';
 import { createEvent } from './routes/createEvent';
 import { createUser } from './routes/createUser';
 import { getEvent } from './routes/getEvent';
@@ -23,7 +22,6 @@ app.get('/user', checkIfAuthenticated, getUser);
 
 // Post events
 app.post('/event', checkIfAuthenticated, createEvent);
-app.post('/event/add', checkIfAuthenticated, addEmails);
 app.post('/create-user', createUser);
 
 // Reply
