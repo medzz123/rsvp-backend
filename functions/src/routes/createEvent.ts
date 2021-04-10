@@ -20,12 +20,6 @@ const API_KEY = functions.config().sendgrid.key;
 
 sgMail.setApiKey(API_KEY);
 
-export interface CreateEventBody {
-  name: string;
-  location: string;
-  emails: string[];
-}
-
 const Event = object({
   image: optional(string()),
   name: string(),

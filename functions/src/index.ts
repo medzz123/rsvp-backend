@@ -9,6 +9,7 @@ import { getEvent } from './routes/getEvent';
 import { getReply } from './routes/getReply';
 import { getUser } from './routes/getUser';
 import { reply } from './routes/reply';
+import { imageUpload } from './routes/upload';
 import { checkIfAuthenticated } from './utils/auth';
 
 const app = express();
@@ -27,6 +28,9 @@ app.post('/create-user', createUser);
 // Reply
 app.post('/reply', reply);
 app.get('/get-reply', getReply);
+
+// Image Upload
+app.post('/get-upload-urls', checkIfAuthenticated, imageUpload);
 
 export const main = functions.region('europe-west1').https.onRequest(app);
 
