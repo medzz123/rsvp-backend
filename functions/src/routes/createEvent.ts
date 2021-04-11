@@ -107,6 +107,17 @@ export const createEvent = async (
 
     await Promise.all(promiseList);
 
+    const reminderRef = db.collection('reminder');
+
+    await reminderRef.doc().set({
+      emails,
+      name,
+      location,
+      startTime,
+      endTime,
+      date,
+    });
+
     return res.status(201).send(newEvent);
   } catch (err) {
     const { code, message } = handleError(err);

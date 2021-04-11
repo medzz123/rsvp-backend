@@ -3,6 +3,7 @@ import * as express from 'express';
 import * as functions from 'firebase-functions';
 
 import { onNewUser } from './firestore/onNewUser';
+import { dailyReminder } from './firestore/reminder';
 import { createEvent } from './routes/createEvent';
 import { createUser } from './routes/createUser';
 import { getEvent } from './routes/getEvent';
@@ -24,6 +25,7 @@ app.get('/user', checkIfAuthenticated, getUser);
 // Post events
 app.post('/event', checkIfAuthenticated, createEvent);
 app.post('/create-user', createUser);
+app.post('/reminder', dailyReminder);
 
 // Reply
 app.post('/reply', reply);
@@ -38,3 +40,8 @@ export const createFirebaseUser = functions
   .region('europe-west1')
   .auth.user()
   .onCreate(onNewUser);
+
+export const reminder = functions
+  .region('europe-west1')
+  .pubsub.schedule('every day 00:00')
+  .onRun(dailyReminder);
