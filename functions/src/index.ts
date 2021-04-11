@@ -25,7 +25,6 @@ app.get('/user', checkIfAuthenticated, getUser);
 // Post events
 app.post('/event', checkIfAuthenticated, createEvent);
 app.post('/create-user', createUser);
-app.post('/reminder', dailyReminder);
 
 // Reply
 app.post('/reply', reply);
