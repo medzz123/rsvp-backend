@@ -1,15 +1,21 @@
+if (process.env.NODE_ENV !== 'production') {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require('dotenv').config();
+}
+
 import * as cors from 'cors';
 import * as express from 'express';
 import * as functions from 'firebase-functions';
 
 import { onNewUser } from './firestore/onNewUser';
-import { dailyReminder } from './firestore/reminder';
+import { reminderPubSub } from './firestore/reminder';
 import { createEvent } from './routes/createEvent';
 import { createUser } from './routes/createUser';
 import { getEvent } from './routes/getEvent';
 import { getReply } from './routes/getReply';
 import { getUser } from './routes/getUser';
 import { reply } from './routes/reply';
+import { superReminder } from './routes/superReminder';
 import { imageUpload } from './routes/upload';
 import { checkIfAuthenticated } from './utils/auth';
 
@@ -33,6 +39,9 @@ app.get('/get-reply', getReply);
 // Image Upload
 app.post('/get-upload-urls', checkIfAuthenticated, imageUpload);
 
+// Super
+app.post('/super-reminder', superReminder);
+
 export const main = functions.region('europe-west1').https.onRequest(app);
 
 export const createFirebaseUser = functions
@@ -42,5 +51,5 @@ export const createFirebaseUser = functions
 
 export const reminder = functions
   .region('europe-west1')
-  .pubsub.schedule('every day 00:00')
-  .onRun(dailyReminder);
+  .pubsub.schedule('every 5 minutes')
+  .onRun(reminderPubSub);

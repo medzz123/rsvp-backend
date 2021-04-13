@@ -8,8 +8,8 @@ import { CustomRequest } from '../types/request';
 import { handleError } from '../utils/handleError';
 
 const s3 = new AWS.S3({
-  accessKeyId: functions.config().aws?.key,
-  secretAccessKey: functions.config().aws?.secret,
+  accessKeyId: functions.config().aws?.key || process.env.AWS_KEY,
+  secretAccessKey: functions.config().aws?.secret || process.env.AWS_SECRET,
   region: 'eu-west-2',
 });
 

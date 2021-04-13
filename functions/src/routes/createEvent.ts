@@ -16,7 +16,7 @@ import { CustomRequest } from '../types/request';
 import { handleError } from '../utils/handleError';
 import { nanoid, tinyId } from '../utils/uid';
 
-const API_KEY = functions.config().sendgrid?.key;
+const API_KEY = functions.config().sendgrid?.key || process.env.SENDGRID_KEY;
 
 sgMail.setApiKey(API_KEY);
 
