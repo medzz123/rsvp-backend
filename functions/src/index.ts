@@ -51,5 +51,5 @@ export const createFirebaseUser = functions
 
 export const reminder = functions
   .region('europe-west1')
-  .pubsub.schedule('every 5 minutes')
+  .pubsub.schedule('every 6 hours')
   .onRun(reminderPubSub);

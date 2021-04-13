@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import * as admin from 'firebase-admin';
 import { assert, boolean, Infer, object, string } from 'superstruct';
 
 import { db } from '../db';
@@ -34,6 +35,28 @@ export const reply = async (
         replied: true,
         attending: attending,
       });
+
+    if (attending === true) {
+      const guestEmailSnap = await db
+        .collection('users')
+        .doc(id)
+        .collection('events')
+        .doc(event)
+        .collection('attendees')
+        .doc(token)
+        .get();
+
+      const data = guestEmailSnap.data();
+
+      if (data) {
+        await db
+          .collection('reminder')
+          .doc(event)
+          .update({
+            emails: admin.firestore.FieldValue.arrayUnion(data.email),
+          });
+      }
+    }
 
     return res.status(200).send({ message: 'Successfully replied' });
   } catch (err) {
